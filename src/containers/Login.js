@@ -3,15 +3,21 @@ import React, { Component } from 'react';
 import Container from '@material-ui/core/Container';
 import { Formik } from 'formik';
 import { withFirebase } from 'react-redux-firebase';
+import { withRouter } from 'react-router';
 
 import LoginForm from '../components/LoginForm';
 
 class LoginContainer extends Component {
 
   handleLogin = async (values, { setSubmitting }) => {
-    const response = await this.props.firebase.login(values);
-    console.log('logged in!', response)
-    setSubmitting(false);
+    try {
+      const response = await this.props.firebase.login(values);
+      console.log('logged in!', response)
+      setSubmitting(false);
+      this.props.history.push('/');
+    } catch(err) {
+      console.log('error', err);
+    }
   }
 
   handleValidate = values => {
@@ -47,4 +53,4 @@ class LoginContainer extends Component {
   }
 }
 
-export default withFirebase(LoginContainer);
+export default withRouter(withFirebase(LoginContainer));
