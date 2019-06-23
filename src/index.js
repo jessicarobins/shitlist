@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import App from './App';
-import { createStore, compose } from 'redux';
-import { reactReduxFirebase } from 'react-redux-firebase';
+import { createStore } from 'redux';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import { Provider } from 'react-redux';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
@@ -19,26 +19,33 @@ import firebaseConfig from './config/firebase';
 // Initialize firebase instance
 firebase.initializeApp(firebaseConfig);
 
+// Create store with reducers and initial state
+const initialState = {};
+const store = createStore(rootReducer, initialState);
+
+
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: 'users',
   useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
 }
 
-// Add reactReduxFirebase enhancer when making store creator
-const createStoreWithFirebase = compose(
-  reactReduxFirebase(firebase, rrfConfig) // firebase instance as first argument
-  // reduxFirestore(firebase) // <- needed if using firestore
-)(createStore);
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+}
 
-// Create store with reducers and initial state
-const initialState = {};
-const store = createStoreWithFirebase(rootReducer, initialState);
+const AppRoot = () => (
+  <Provider store={store}>
+    <ReactReduxFirebaseProvider {...rrfProps}>
+      <App />
+    </ReactReduxFirebaseProvider>
+  </Provider>
+);
 
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <AppRoot/>,
   document.getElementById('root')
 );
 
