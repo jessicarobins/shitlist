@@ -1,62 +1,46 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+
 import Container from '@material-ui/core/Container';
+import { Formik } from 'formik';
 import { withFirebase } from 'react-redux-firebase';
+
+import LoginForm from '../components/LoginForm';
 
 class LoginContainer extends Component {
 
-  login = (event) => {
-    event.preventDefault();
-    console.log('we are logged in!', this)
+  handleLogin = async (values, { setSubmitting }) => {
+    const response = await this.props.firebase.login(values);
+    console.log('logged in!', response)
+    setSubmitting(false);
+  }
+
+  handleValidate = values => {
+    let errors = {};
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+    ) {
+      errors.email = 'Invalid email address';
+    }
+
+    if (!values.password) {
+      errors.password = 'Required';
+    }
+    return errors;
   }
 
   render() {
     return (
       <Container component="main" maxWidth="xs">
         <div>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <form noValidate onSubmit={this.login}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                >
-                  Login
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validate={this.handleValidate}
+            onSubmit={this.handleLogin}
+          >
+            {LoginForm}
+          </Formik>
         </div>
       </Container>
     );
