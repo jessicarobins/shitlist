@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/functions';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
@@ -18,6 +19,7 @@ import firebaseConfig from './config/firebase';
 
 // Initialize firebase instance
 firebase.initializeApp(firebaseConfig);
+firebase.functions();
 
 // Create store with reducers and initial state
 const initialState = {};

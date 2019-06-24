@@ -23,3 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 .firebase
+functions/creds*.json
+firestore-debug.log
+firebase-debug.log
+
+**/.vscode/**

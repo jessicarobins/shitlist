@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Home from './containers/Home';
 import Login from './containers/Login';
+import Refer from './containers/Refer';
 import Search from './containers/Search';
 import SignUp from './containers/SignUp';
 import './App.css';
@@ -14,8 +15,9 @@ function App() {
       <CssBaseline />
       <Router>
         <Route path="/" exact component={Home} />
-        <Route path="/search" exact component={Search} />
         <Route path="/login" exact component={Login} />
+        <Route path="/refer" exact component={Refer} />
+        <Route path="/search" exact component={Search} />
         <Route path="/signup" exact component={SignUp} />
       </Router>
     </React.Fragment>
