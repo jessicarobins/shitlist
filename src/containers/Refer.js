@@ -17,7 +17,6 @@ class Refer extends Component {
   }
 
   render() {
-    console.log('state?', this.state)
     return (
       <Container component="main" maxWidth="xs">
         <div>
